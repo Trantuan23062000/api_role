@@ -1,18 +1,22 @@
 import express from "express";
-import homecontroller from "../controller/homecontroller"
+import homecontroller from "../controller/homecontroller";
 
 /**
  *
  * @param {*} app
  */
-const router = express.Router();
+const router = express.Router()
 const initWedRoutes = (app) => {
-  router.get("/",homecontroller.HandleHello )
+  router.get("/", homecontroller.HandleHello)
 
-  router.get("/user",homecontroller.UserPage)
+  router.get("/user", homecontroller.UserPage)
 
-  router.post("/users/create-user",homecontroller.HadlecreateUser)
-   router.post("/delete-user/:id",homecontroller.HadleDeleteUser)
+  router.post("/users/create-user", homecontroller.HadlecreateUser)
+  router.post("/delete-user/:id", homecontroller.HadleDeleteUser)
+  router.get("/update-user/:id",homecontroller.getUpdateUser)
+  router.post("/user/update-user",homecontroller.HandleUpdateUser)
+
+
 
   return app.use("/", router);
 };
