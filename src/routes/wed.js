@@ -12,6 +12,7 @@ const initWedRoutes = (app) => {
   router.get("/user",homecontroller.UserPage)
 
   router.post("/users/create-user",homecontroller.HadlecreateUser)
+   router.post("/delete-user/:id",homecontroller.HadleDeleteUser)
 
   return app.use("/", router);
 };
