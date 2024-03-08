@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 // Get the client
 import mysql from "mysql2/promise";
 import bluebird from "bluebird";
+import db from "../models/index"
+
 
 // Create the connection to database
 
@@ -12,23 +14,19 @@ const HashUserPassword = (password) => {
   return hasPassword;
 };
 
-const CreateUser = async (email, password, username) => {
+const CreateUser = async (username, email, password) => {
   let hasPass = HashUserPassword(password);
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "demos",
-    Promise: bluebird,
-  });
-  try {
-    const [rows, fields] = await connection.execute(
-      "INSERT INTO USER(EMAIL,PASSWORD,USERNAME) VALUES(?,?,?)",
-      [email, hasPass, username]
-    );
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
+      try {
+        await db.User.create({
+          username:username,
+          email:email,
+          password:hasPass
+
+        })
+        
+      } catch (error) {
+         console.log(error)
+      }
 };
 
 const GetUserList = async () => {
@@ -38,10 +36,9 @@ const GetUserList = async () => {
     database: "demos",
     Promise: bluebird,
   });
-  let users = [];
 
   try {
-    const [rows, fields] = await connection.execute("SELECT * FROM USER");
+    const [rows, fields] = await connection.execute("SELECT * FROM USERS");
     return rows;
   } catch (error) {
     console.log(error);
@@ -57,7 +54,7 @@ const GetUserById = async (id) => {
   });
   try {
     const [rows, fields] = await connection.execute(
-      "SELECT * FROM USER WHERE ID = ?",
+      "SELECT * FROM USERS WHERE ID = ?",
       [id]
     );
     return rows;
@@ -75,8 +72,8 @@ const UpdateUser = async (email, username , id) => {
   });
   try {
     const [rows, fields] = await connection.execute(
-      "UPDATE USER SET EMAIL = ? , USERNAME = ? WHERE ID =?",
-      [email, username, id]
+      "UPDATE USERS SET USERNAME = ? , EMAIL = ? WHERE ID =?",
+      [username,email,id]
     );
     return rows;
   } catch (error) {
@@ -95,7 +92,7 @@ const DeleteUsers = async (id) => {
 
   try {
     const [rows, fields] = await connection.execute(
-      "DELETE FROM USER WHERE ID = ?",
+      "DELETE FROM USERS WHERE ID = ?",
       [id]
     );
     return rows;

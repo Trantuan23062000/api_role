@@ -11,15 +11,14 @@ const UserPage = async (req, res) => {
 };
 
 const HadlecreateUser = (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
   let username = req.body.username;
+  let email = req.body.email; 
+  let password = req.body.password;
 
-  userSevirce.CreateUser(email, password, username);
+  userSevirce.CreateUser(username, email, password);
   // //let check = bcrypt.compareSync(password,hasPassword)
   // console.log(">>>>",hasPassword);
   // console.log(">>",check);
-
   return res.redirect("/user");
 };
 
