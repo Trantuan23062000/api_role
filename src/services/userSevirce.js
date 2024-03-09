@@ -30,75 +30,32 @@ const CreateUser = async (username, email, password) => {
 };
 
 const GetUserList = async () => {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "demos",
-    Promise: bluebird,
-  });
+  let users = []
+  users = await db.User.findAll()
+  return users
 
-  try {
-    const [rows, fields] = await connection.execute("SELECT * FROM USERS");
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
 };
 
 const GetUserById = async (id) => {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "demos",
-    Promise: bluebird,
-  });
-  try {
-    const [rows, fields] = await connection.execute(
-      "SELECT * FROM USERS WHERE ID = ?",
-      [id]
-    );
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
+  let user = {}
+  user = await db.User.findOne({
+    where : {id}
+  })
+  //console.log(user.get({plain:true}));
+  return user.get({plain:true})
+  
 };
 
 const UpdateUser = async (email, username , id) => {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "demos",
-    Promise: bluebird,
-  });
-  try {
-    const [rows, fields] = await connection.execute(
-      "UPDATE USERS SET USERNAME = ? , EMAIL = ? WHERE ID =?",
-      [username,email,id]
-    );
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
+      await db.User.update({email, username },{
+        where:{id}
+      })
 };
 
 const DeleteUsers = async (id) => {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "demos",
-    Promise: bluebird,
-  });
-  let users = [];
-
-  try {
-    const [rows, fields] = await connection.execute(
-      "DELETE FROM USERS WHERE ID = ?",
-      [id]
-    );
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
+  await db.User.destroy({
+    where:{id}
+  })
 };
 
 module.exports = {
